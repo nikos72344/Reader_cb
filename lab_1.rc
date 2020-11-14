@@ -1,0 +1,25 @@
+#include "lab_1.h"
+
+//Описание ресурса иконки
+
+Reader ICON icon.ico
+
+//Описание ресурса меню
+
+Reader MENU
+{
+  POPUP "&File" // - cекция "File"
+  {
+    MENUITEM "&Open...", IDM_OPEN
+    MENUITEM SEPARATOR
+    MENUITEM "&Exit", IDM_EXIT
+  }
+  POPUP "&View" // - секция "View"
+  {
+    MENUITEM "&Layout", IDM_LAYOUT, CHECKED
+  }
+  POPUP "&Help" // - секция "Help"
+  {
+    MENUITEM "&About Reader...", IDM_ABOUT
+  }
+}
