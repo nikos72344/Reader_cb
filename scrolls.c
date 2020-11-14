@@ -2,125 +2,124 @@
 #include"scrolls.h"
 #include "file.h"
 
-//Функция обновления данных вывода текста
+//Р¤СѓРЅРєС†РёСЏ РѕР±РЅРѕРІР»РµРЅРёСЏ РґР°РЅРЅС‹С… РІС‹РІРѕРґР° С‚РµРєСЃС‚Р°
 
 void PrintMetrixUpd(SysState* SState, RECT* RCT)
 {
   int width;
 
-  //Нахождения индекса последней выводимой строки на видимую область экрана
+  //РќР°С…РѕР¶РґРµРЅРёСЏ РёРЅРґРµРєСЃР° РїРѕСЃР»РµРґРЅРµР№ РІС‹РІРѕРґРёРјРѕР№ СЃС‚СЂРѕРєРё РЅР° РІРёРґРёРјСѓСЋ РѕР±Р»Р°СЃС‚СЊ СЌРєСЂР°РЅР°
 
   int fin = min(SState->strNum, SState->scrlMetrix.vScrollPos * SState->scrlMetrix.vScrollCoef + RCT->bottom / SState->yChar);
 
-  //Нахождение индекса первой выводимой строки на экран
+  //РќР°С…РѕР¶РґРµРЅРёРµ РёРЅРґРµРєСЃР° РїРµСЂРІРѕР№ РІС‹РІРѕРґРёРјРѕР№ СЃС‚СЂРѕРєРё РЅР° СЌРєСЂР°РЅ
 
   SState->prntMetrix.pntBeg = max(0, SState->scrlMetrix.vScrollPos * SState->scrlMetrix.vScrollCoef + RCT->top / SState->yChar);
 
-  //Нахождения индекса последней выводимой на экран строки
+  //РќР°С…РѕР¶РґРµРЅРёСЏ РёРЅРґРµРєСЃР° РїРѕСЃР»РµРґРЅРµР№ РІС‹РІРѕРґРёРјРѕР№ РЅР° СЌРєСЂР°РЅ СЃС‚СЂРѕРєРё
 
   SState->prntMetrix.pntEnd = min(SState->strNum, SState->scrlMetrix.vScrollPos * SState->scrlMetrix.vScrollCoef + 2 * RCT->bottom / SState->yChar);
 
-  //В программе выводятся дополнительные строки для исключения мерцания при пролистывании
+  //Р’ РїСЂРѕРіСЂР°РјРјРµ РІС‹РІРѕРґСЏС‚СЃСЏ РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рµ СЃС‚СЂРѕРєРё РґР»СЏ РёСЃРєР»СЋС‡РµРЅРёСЏ РјРµСЂС†Р°РЅРёСЏ РїСЂРё РїСЂРѕР»РёСЃС‚С‹РІР°РЅРёРё
 
-  SState->prntMetrix.maxLen = 0; // - обнуление переменной размера строки максимальной длинны
-  SState->sumNum = SState->strNum; // - сборс количества строк с учетом метрики для режима верстки
+  SState->prntMetrix.maxLen = 0; // - РѕР±РЅСѓР»РµРЅРёРµ РїРµСЂРµРјРµРЅРЅРѕР№ СЂР°Р·РјРµСЂР° СЃС‚СЂРѕРєРё РјР°РєСЃРёРјР°Р»СЊРЅРѕР№ РґР»РёРЅРЅС‹
+  SState->sumNum = SState->strNum; // - СЃР±РѕСЂСЃ РєРѕР»РёС‡РµСЃС‚РІР° СЃС‚СЂРѕРє СЃ СѓС‡РµС‚РѕРј РјРµС‚СЂРёРєРё РґР»СЏ СЂРµР¶РёРјР° РІРµСЂСЃС‚РєРё
   for (int i = SState->prntMetrix.pntBeg; i < SState->prntMetrix.pntEnd; i++)
   {
     width = SState->xChar * (SState->strings[i].size + 1) / SState->xClient;
-    SState->sumNum += width; // - учитывание отображения перенесенных строк в режиме верстки
+    SState->sumNum += width; // - СѓС‡РёС‚С‹РІР°РЅРёРµ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ РїРµСЂРµРЅРµСЃРµРЅРЅС‹С… СЃС‚СЂРѕРє РІ СЂРµР¶РёРјРµ РІРµСЂСЃС‚РєРё
     if (i < fin && SState->prntMetrix.maxLen < ((SState->strings[i].size + 1) * SState->xChar))
-      SState->prntMetrix.maxLen = (SState->strings[i].size + 1) * SState->xChar; // - нахождение значения самой длинной строки, выводимой на экран
+      SState->prntMetrix.maxLen = (SState->strings[i].size + 1) * SState->xChar; // - РЅР°С…РѕР¶РґРµРЅРёРµ Р·РЅР°С‡РµРЅРёСЏ СЃР°РјРѕР№ РґР»РёРЅРЅРѕР№ СЃС‚СЂРѕРєРё, РІС‹РІРѕРґРёРјРѕР№ РЅР° СЌРєСЂР°РЅ
   }
 }
 
-//Функция обновления значений вертикальной полосы прокрутки
+//Р¤СѓРЅРєС†РёСЏ РѕР±РЅРѕРІР»РµРЅРёСЏ Р·РЅР°С‡РµРЅРёР№ РІРµСЂС‚РёРєР°Р»СЊРЅРѕР№ РїРѕР»РѕСЃС‹ РїСЂРѕРєСЂСѓС‚РєРё
 
 void vScrollUpd(SysState* SState, HWND hwnd)
 {
   switch (SState->vType)
   {
-  case layoutV: // - в случае режима верстки коэффициент и максимальное значение высчитываются исходя из количества строк с учетом метрики отображения
-    SState->scrlMetrix.vScrollCoef = SState->sumNum / ScrollSize + 1;
+  case layoutV: // - РІ СЃР»СѓС‡Р°Рµ СЂРµР¶РёРјР° РІРµСЂСЃС‚РєРё РєРѕСЌС„С„РёС†РёРµРЅС‚ Рё РјР°РєСЃРёРјР°Р»СЊРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ РІС‹СЃС‡РёС‚С‹РІР°СЋС‚СЃСЏ РёСЃС…РѕРґСЏ РёР· РєРѕР»РёС‡РµСЃС‚РІР° СЃС‚СЂРѕРє СЃ СѓС‡РµС‚РѕРј РјРµС‚СЂРёРєРё РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ
     SState->scrlMetrix.vScrollMax = max(0, SState->sumNum / SState->scrlMetrix.vScrollCoef - 1);
     break;
-  case defaultV: // - в случае режима по умолчанию коэффициент и максимальное значение высчитываются исходя из количества строк без учета метрики отображения
+  case defaultV: // - РІ СЃР»СѓС‡Р°Рµ СЂРµР¶РёРјР° РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ РєРѕСЌС„С„РёС†РёРµРЅС‚ Рё РјР°РєСЃРёРјР°Р»СЊРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ РІС‹СЃС‡РёС‚С‹РІР°СЋС‚СЃСЏ РёСЃС…РѕРґСЏ РёР· РєРѕР»РёС‡РµСЃС‚РІР° СЃС‚СЂРѕРє Р±РµР· СѓС‡РµС‚Р° РјРµС‚СЂРёРєРё РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ
     SState->scrlMetrix.vScrollCoef = SState->strNum / ScrollSize + 1;
     SState->scrlMetrix.vScrollMax = max(0, SState->strNum / SState->scrlMetrix.vScrollCoef - 1);
     break;
   }
 
-  //Предотвращение выхода значения положения ползунка за установленные границы
+  //РџСЂРµРґРѕС‚РІСЂР°С‰РµРЅРёРµ РІС‹С…РѕРґР° Р·РЅР°С‡РµРЅРёСЏ РїРѕР»РѕР¶РµРЅРёСЏ РїРѕР»Р·СѓРЅРєР° Р·Р° СѓСЃС‚Р°РЅРѕРІР»РµРЅРЅС‹Рµ РіСЂР°РЅРёС†С‹
 
   SState->scrlMetrix.vScrollPos = min(SState->scrlMetrix.vScrollPos, SState->scrlMetrix.vScrollMax);
 
-  //Установка диапазона и положения ползунка
+  //РЈСЃС‚Р°РЅРѕРІРєР° РґРёР°РїР°Р·РѕРЅР° Рё РїРѕР»РѕР¶РµРЅРёСЏ РїРѕР»Р·СѓРЅРєР°
 
   SetScrollRange(hwnd, SB_VERT, 0, SState->scrlMetrix.vScrollMax, FALSE);
   SetScrollPos(hwnd, SB_VERT, SState->scrlMetrix.vScrollPos, TRUE);
 }
 
-//Функция обновления значений горизонтальной полосы прокрутки
+//Р¤СѓРЅРєС†РёСЏ РѕР±РЅРѕРІР»РµРЅРёСЏ Р·РЅР°С‡РµРЅРёР№ РіРѕСЂРёР·РѕРЅС‚Р°Р»СЊРЅРѕР№ РїРѕР»РѕСЃС‹ РїСЂРѕРєСЂСѓС‚РєРё
 
 void hScrollUpd(SysState* SState, HWND hwnd)
 {
   switch (SState->vType)
   {
-  case layoutV: // - в случае режима верстки горизонтальная полоса прокрутки "выключается"
+  case layoutV: // - РІ СЃР»СѓС‡Р°Рµ СЂРµР¶РёРјР° РІРµСЂСЃС‚РєРё РіРѕСЂРёР·РѕРЅС‚Р°Р»СЊРЅР°СЏ РїРѕР»РѕСЃР° РїСЂРѕРєСЂСѓС‚РєРё "РІС‹РєР»СЋС‡Р°РµС‚СЃСЏ"
     SState->scrlMetrix.hScrollMax = 0;
     SState->scrlMetrix.hScrollPos = 0;
     SState->scrlMetrix.hScrollCoef = 0;
     break;
-  case defaultV:  // - в случае режима по умолчанию коэффициент, максимальное значение и положение ползунка высчитываются исходя из максимальной длины отображаемой строки
+  case defaultV:  // - РІ СЃР»СѓС‡Р°Рµ СЂРµР¶РёРјР° РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ РєРѕСЌС„С„РёС†РёРµРЅС‚, РјР°РєСЃРёРјР°Р»СЊРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ Рё РїРѕР»РѕР¶РµРЅРёРµ РїРѕР»Р·СѓРЅРєР° РІС‹СЃС‡РёС‚С‹РІР°СЋС‚СЃСЏ РёСЃС…РѕРґСЏ РёР· РјР°РєСЃРёРјР°Р»СЊРЅРѕР№ РґР»РёРЅС‹ РѕС‚РѕР±СЂР°Р¶Р°РµРјРѕР№ СЃС‚СЂРѕРєРё
     SState->scrlMetrix.hScrollCoef = SState->prntMetrix.maxLen / ScrollSize + 1;
     SState->scrlMetrix.hScrollMax = max(0, (SState->prntMetrix.maxLen / SState->scrlMetrix.hScrollCoef - SState->xClient + SState->xChar) / SState->xChar);
     SState->scrlMetrix.hScrollPos = min(SState->scrlMetrix.hScrollPos, SState->scrlMetrix.hScrollMax);
     break;
   }
 
-  //Установка диапазона и положения ползунка
+  //РЈСЃС‚Р°РЅРѕРІРєР° РґРёР°РїР°Р·РѕРЅР° Рё РїРѕР»РѕР¶РµРЅРёСЏ РїРѕР»Р·СѓРЅРєР°
 
   SetScrollRange(hwnd, SB_HORZ, 0, SState->scrlMetrix.hScrollMax, FALSE);
   SetScrollPos(hwnd, SB_HORZ, SState->scrlMetrix.hScrollPos, TRUE);
 }
 
-//Функция сбрасывающая положения горизонтальной и вертикальной полос прокрутки
+//Р¤СѓРЅРєС†РёСЏ СЃР±СЂР°СЃС‹РІР°СЋС‰Р°СЏ РїРѕР»РѕР¶РµРЅРёСЏ РіРѕСЂРёР·РѕРЅС‚Р°Р»СЊРЅРѕР№ Рё РІРµСЂС‚РёРєР°Р»СЊРЅРѕР№ РїРѕР»РѕСЃ РїСЂРѕРєСЂСѓС‚РєРё
 
 void ScrollsReset(SysState* SState, HWND hwnd)
 {
   switch (SState->vType)
   {
-  case layoutV: // - в случае режима верстки
-
-    //Вертикальная полоса прокрутки высчитывается с учетом количества строк с учетом метрики отображения
+  case layoutV: // - РІ СЃР»СѓС‡Р°Рµ СЂРµР¶РёРјР° РІРµСЂСЃС‚РєРё
+      
+   //Р’РµСЂС‚РёРєР°Р»СЊРЅР°СЏ РїРѕР»РѕСЃР° РїСЂРѕРєСЂСѓС‚РєРё РІС‹СЃС‡РёС‚С‹РІР°РµС‚СЃСЏ СЃ СѓС‡РµС‚РѕРј РєРѕР»РёС‡РµСЃС‚РІР° СЃС‚СЂРѕРє СЃ СѓС‡РµС‚РѕРј РјРµС‚СЂРёРєРё РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ
 
     SState->scrlMetrix.vScrollCoef = SState->sumNum / ScrollSize + 1;
     SState->scrlMetrix.vScrollMax = max(0, SState->sumNum / SState->scrlMetrix.vScrollCoef - 1);
 
-    //Горизонтальная полоса "выключается"
+    //Р“РѕСЂРёР·РѕРЅС‚Р°Р»СЊРЅР°СЏ РїРѕР»РѕСЃР° "РІС‹РєР»СЋС‡Р°РµС‚СЃСЏ"
 
     SState->scrlMetrix.hScrollMax = 0;
     SState->scrlMetrix.hScrollCoef = 0;
     break;
-  case defaultV: // - в случае режима по умолчанию
+  case defaultV: // - РІ СЃР»СѓС‡Р°Рµ СЂРµР¶РёРјР° РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
 
-    //Вертикальная полоса прокрутки высчитывается с учетом количества строк без учета метрики отображения
+    //Р’РµСЂС‚РёРєР°Р»СЊРЅР°СЏ РїРѕР»РѕСЃР° РїСЂРѕРєСЂСѓС‚РєРё РІС‹СЃС‡РёС‚С‹РІР°РµС‚СЃСЏ СЃ СѓС‡РµС‚РѕРј РєРѕР»РёС‡РµСЃС‚РІР° СЃС‚СЂРѕРє Р±РµР· СѓС‡РµС‚Р° РјРµС‚СЂРёРєРё РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ
 
     SState->scrlMetrix.vScrollCoef = SState->strNum / ScrollSize + 1;
     SState->scrlMetrix.vScrollMax = max(0, SState->strNum / SState->scrlMetrix.vScrollCoef - 1);
 
-    //Горизонтальная полоса прокрутки высчитывается с учетом максимальной длины отображаемой строки
+    //Р“РѕСЂРёР·РѕРЅС‚Р°Р»СЊРЅР°СЏ РїРѕР»РѕСЃР° РїСЂРѕРєСЂСѓС‚РєРё РІС‹СЃС‡РёС‚С‹РІР°РµС‚СЃСЏ СЃ СѓС‡РµС‚РѕРј РјР°РєСЃРёРјР°Р»СЊРЅРѕР№ РґР»РёРЅС‹ РѕС‚РѕР±СЂР°Р¶Р°РµРјРѕР№ СЃС‚СЂРѕРєРё
 
     SState->scrlMetrix.hScrollCoef = SState->prntMetrix.maxLen / ScrollSize + 1;
     SState->scrlMetrix.hScrollMax = max(0, (SState->prntMetrix.maxLen / SState->scrlMetrix.hScrollCoef - SState->xClient + SState->xChar) / SState->xChar);
     break;
   }
 
-  //Сброс позиции ползунков
+  //РЎР±СЂРѕСЃ РїРѕР·РёС†РёРё РїРѕР»Р·СѓРЅРєРѕРІ
 
   SState->scrlMetrix.vScrollPos = 0;
   SState->scrlMetrix.hScrollPos = 0;
 
-  //Установка соответствующих диапазонов и положений ползунков
+  //РЈСЃС‚Р°РЅРѕРІРєР° СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёС… РґРёР°РїР°Р·РѕРЅРѕРІ Рё РїРѕР»РѕР¶РµРЅРёР№ РїРѕР»Р·СѓРЅРєРѕРІ
 
   SetScrollRange(hwnd, SB_VERT, 0, SState->scrlMetrix.vScrollMax, FALSE);
   SetScrollPos(hwnd, SB_VERT, SState->scrlMetrix.vScrollPos, TRUE);
@@ -129,49 +128,49 @@ void ScrollsReset(SysState* SState, HWND hwnd)
   SetScrollPos(hwnd, SB_HORZ, SState->scrlMetrix.hScrollPos, TRUE);
 }
 
-//Функция, меняющая заголовок окна
+//Р¤СѓРЅРєС†РёСЏ, РјРµРЅСЏСЋС‰Р°СЏ Р·Р°РіРѕР»РѕРІРѕРє РѕРєРЅР°
 
 void ChangeWndTitle(SysState* SState, HWND hwnd)
 {
-  const char postfix[] = " - Reader"; // - постфикс
+  const char postfix[] = " - Reader"; // - РїРѕСЃС‚С„РёРєСЃ
   int size = strlen(SState->ofn.lpstrFileTitle) + strlen(postfix) + 1;
-  char* title = malloc(size * sizeof(char));  // - выделение памяти для буфера
-  if (!title) // - в случае неудачного выделения заголовок останется прежний, а пользователь будет уведомлен об этом звуковым сигналом
+  char* title = malloc(size * sizeof(char));  // - РІС‹РґРµР»РµРЅРёРµ РїР°РјСЏС‚Рё РґР»СЏ Р±СѓС„РµСЂР°
+  if (!title) // - РІ СЃР»СѓС‡Р°Рµ РЅРµСѓРґР°С‡РЅРѕРіРѕ РІС‹РґРµР»РµРЅРёСЏ Р·Р°РіРѕР»РѕРІРѕРє РѕСЃС‚Р°РЅРµС‚СЃСЏ РїСЂРµР¶РЅРёР№, Р° РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ Р±СѓРґРµС‚ СѓРІРµРґРѕРјР»РµРЅ РѕР± СЌС‚РѕРј Р·РІСѓРєРѕРІС‹Рј СЃРёРіРЅР°Р»РѕРј
   {
     MessageBeep(0);
     return;
   }
 
-  //Заполнение буфера
+  //Р—Р°РїРѕР»РЅРµРЅРёРµ Р±СѓС„РµСЂР°
 
   strcpy(title, SState->ofn.lpstrFileTitle);
   strcat(title, postfix);
-  SetWindowText(hwnd, title);  // - установка нового заголовка
-  free(title);  // - освобождение буфера
+  SetWindowText(hwnd, title); // - СѓСЃС‚Р°РЅРѕРІРєР° РЅРѕРІРѕРіРѕ Р·Р°РіРѕР»РѕРІРєР°
+  free(title);  // - РѕСЃРІРѕР±РѕР¶РґРµРЅРёРµ Р±СѓС„РµСЂР°
 }
 
-//Функция, обрабатывающая аргументы строки
+//Р¤СѓРЅРєС†РёСЏ, РѕР±СЂР°Р±Р°С‚С‹РІР°СЋС‰Р°СЏ Р°СЂРіСѓРјРµРЅС‚С‹ СЃС‚СЂРѕРєРё
 
 void Args(SysState* SState, HWND hwnd, LPARAM lParam)
 {
-  //Получение аргументов командной строки
+  //РџРѕР»СѓС‡РµРЅРёРµ Р°СЂРіСѓРјРµРЅС‚РѕРІ РєРѕРјР°РЅРґРЅРѕР№ СЃС‚СЂРѕРєРё
 
   CREATESTRUCT* cs = (CREATESTRUCT*)lParam;
   RECT rect;
   char* temp = cs->lpCreateParams;
-  if (!strcmp(temp, ""))  // - выход из ф-ии в случае отсутствия аргументов
+  if (!strcmp(temp, ""))  // - РІС‹С…РѕРґ РёР· С„-РёРё РІ СЃР»СѓС‡Р°Рµ РѕС‚СЃСѓС‚СЃС‚РІРёСЏ Р°СЂРіСѓРјРµРЅС‚РѕРІ
     return;
 
-  //Заполнение соответствующих массивов
+  //Р—Р°РїРѕР»РЅРµРЅРёРµ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёС… РјР°СЃСЃРёРІРѕРІ
 
   for (int i = 0; i <= (int)strlen(temp); i++)
   {
     SState->flName[i] = temp[i];
     SState->ttlName[i] = temp[i];
   }
-  ReadText(SState);  // - чтение текста из файла
+  ReadText(SState);  // - С‡С‚РµРЅРёРµ С‚РµРєСЃС‚Р° РёР· С„Р°Р№Р»Р°
 
-  //Обновление данных
+  //РћР±РЅРѕРІР»РµРЅРёРµ РґР°РЅРЅС‹С…
 
   GetClientRect(hwnd, &rect);
   PrintMetrixUpd(SState, &rect);
