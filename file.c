@@ -1,7 +1,7 @@
 #include "lab_1.h"
 #include "file.h"
 
-//Функция освобождения памяти
+//Р¤СѓРЅРєС†РёСЏ РѕСЃРІРѕР±РѕР¶РґРµРЅРёСЏ РїР°РјСЏС‚Рё
 
 void ReleaseMemory(String* Strings, unsigned int StrNum)
 {
@@ -10,7 +10,7 @@ void ReleaseMemory(String* Strings, unsigned int StrNum)
   free(Strings);
 }
 
-//Функция обработки ошибок при считывании
+//Р¤СѓРЅРєС†РёСЏ РѕР±СЂР°Р±РѕС‚РєРё РѕС€РёР±РѕРє РїСЂРё СЃС‡РёС‚С‹РІР°РЅРёРё
 
 void ReadError(SysState* SState)
 {
@@ -20,25 +20,25 @@ void ReadError(SysState* SState)
   MessageBeep(0);
 }
 
-//Функция считывания текста из файла
+//Р¤СѓРЅРєС†РёСЏ СЃС‡РёС‚С‹РІР°РЅРёСЏ С‚РµРєСЃС‚Р° РёР· С„Р°Р№Р»Р°
 
 void ReadText(SysState* SState)
 {
-    FILE* file = fopen(SState->ofn.lpstrFile, "r"); // - открытие файла на чтение
+    FILE* file = fopen(SState->ofn.lpstrFile, "r"); // - РѕС‚РєСЂС‹С‚РёРµ С„Р°Р№Р»Р° РЅР° С‡С‚РµРЅРёРµ
   if (!file)
   {
     ReadError(SState);
     return;
   }
 
-  String* strings = (String*)malloc(sizeof(String));  // - выделение памяти пол массив строк
+  String* strings = (String*)malloc(sizeof(String));  // - РІС‹РґРµР»РµРЅРёРµ РїР°РјСЏС‚Рё РїРѕР» РјР°СЃСЃРёРІ СЃС‚СЂРѕРє
   if (strings == NULL)
   {
     fclose(file);
     ReadError(SState);
     return;
   }
-  strings[0].data = (char*)malloc(szBuffer * sizeof(char));  // - выделение памяти под массив содержимого строки
+  strings[0].data = (char*)malloc(szBuffer * sizeof(char));  // - РІС‹РґРµР»РµРЅРёРµ РїР°РјСЏС‚Рё РїРѕРґ РјР°СЃСЃРёРІ СЃРѕРґРµСЂР¶РёРјРѕРіРѕ СЃС‚СЂРѕРєРё
   if (strings[0].data == NULL)
   {
     free(strings);
@@ -49,8 +49,8 @@ void ReadText(SysState* SState)
   int i = 0, j = 0, flag = 0;
   while (1)
   {
-    flag = fscanf(file, "%c", &strings[j].data[i]);  // - считывание содержимого из файла
-    if (strings[j].data[i] == '\n')  // - обработка конца строки
+    flag = fscanf(file, "%c", &strings[j].data[i]);  // - СЃС‡РёС‚С‹РІР°РЅРёРµ СЃРѕРґРµСЂР¶РёРјРѕРіРѕ РёР· С„Р°Р№Р»Р°
+    if (strings[j].data[i] == '\n')  // - РѕР±СЂР°Р±РѕС‚РєР° РєРѕРЅС†Р° СЃС‚СЂРѕРєРё
     {
       strings[j].data[i] = '\0';
       strings[j].size = i;
@@ -75,7 +75,7 @@ void ReadText(SysState* SState)
       }
     }
     i++;
-    if (i % szBuffer == 0)  // - обработка заполнения буфера
+    if (i % szBuffer == 0)  // - РѕР±СЂР°Р±РѕС‚РєР° Р·Р°РїРѕР»РЅРµРЅРёСЏ Р±СѓС„РµСЂР°
     {
       char* temp = (char*)realloc(strings[j].data, (i + szBuffer) * sizeof(char));
       if (temp == NULL)
@@ -87,23 +87,23 @@ void ReadText(SysState* SState)
       }
       strings[j].data = temp;
     }
-    if (flag == EOF)  // - обработка достижения конца файла
+    if (flag == EOF)  // - РѕР±СЂР°Р±РѕС‚РєР° РґРѕСЃС‚РёР¶РµРЅРёСЏ РєРѕРЅС†Р° С„Р°Р№Р»Р°
     {
       strings[j].data[i - 1] = '\0';
       strings[j].size = i - 1;
       break;
     }
   }
-  fclose(file);  // - закрытие файла
+  fclose(file);  // - Р·Р°РєСЂС‹С‚РёРµ С„Р°Р№Р»Р°
 
-  //Присвоение соответствующих значений структуре
+  //РџСЂРёСЃРІРѕРµРЅРёРµ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёС… Р·РЅР°С‡РµРЅРёР№ СЃС‚СЂСѓРєС‚СѓСЂРµ
 
   SState->strings = strings;
   SState->strNum = j + 1;
   SState->sumNum = j + 1;
 }
 
-//Функция инициализации структуры OPENFILENAME
+//Р¤СѓРЅРєС†РёСЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё СЃС‚СЂСѓРєС‚СѓСЂС‹ OPENFILENAME
 
 void FileInitialize(SysState* SState, HWND hwnd)
 {
