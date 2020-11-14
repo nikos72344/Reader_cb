@@ -1,54 +1,53 @@
 #include "lab_1.h"
 #include "funcs.h"
 
-//Прототип процедурной функции
+//РџСЂРѕС‚РѕС‚РёРї РїСЂРѕС†РµРґСѓСЂРЅРѕР№ С„СѓРЅРєС†РёРё
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
-//Функция входа
+//Р¤СѓРЅРєС†РёСЏ РІС…РѕРґР°
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow)
 {
-  char appName[] = "Reader"; // - название окна программы
+  char appName[] = "Reader"; // - РЅР°Р·РІР°РЅРёРµ РѕРєРЅР° РїСЂРѕРіСЂР°РјРјС‹
   HWND        hwnd;
   MSG         msg;
   WNDCLASSEX  wndclass;
 
-  //Заполняем структуру окна
+ //Р—Р°РїРѕР»РЅСЏРµРј СЃС‚СЂСѓРєС‚СѓСЂСѓ РѕРєРЅР°
 
   wndclass.cbSize = sizeof(wndclass);
-  wndclass.style = CS_HREDRAW | CS_VREDRAW; // - перерисовка окна при изменении размеров
-  wndclass.lpfnWndProc = WndProc; // - указание процедурной функции
+  wndclass.style = CS_HREDRAW | CS_VREDRAW;  //Р—Р°РїРѕР»РЅСЏРµРј СЃС‚СЂСѓРєС‚СѓСЂСѓ РѕРєРЅР°
+  wndclass.lpfnWndProc = WndProc; // - СѓРєР°Р·Р°РЅРёРµ РїСЂРѕС†РµРґСѓСЂРЅРѕР№ С„СѓРЅРєС†РёРё
   wndclass.cbClsExtra = 0;
   wndclass.cbWndExtra = 0;
   wndclass.hInstance = hInstance;
-  wndclass.hIcon = LoadIcon(hInstance, appName); // - установка иконки из ресурсов
+  wndclass.hIcon = LoadIcon(hInstance, appName); // - СѓСЃС‚Р°РЅРѕРІРєР° РёРєРѕРЅРєРё РёР· СЂРµСЃСѓСЂСЃРѕРІ
   wndclass.hCursor = LoadCursor(NULL, IDC_ARROW);
-  wndclass.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH); // - заполнение фона белой кистью
+  wndclass.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH); // - Р·Р°РїРѕР»РЅРµРЅРёРµ С„РѕРЅР° Р±РµР»РѕР№ РєРёСЃС‚СЊСЋ
   wndclass.lpszMenuName = appName;
   wndclass.lpszClassName = appName;
-  wndclass.hIconSm = LoadIcon(hInstance, appName); // - установка маленькой иконки
+  wndclass.hIconSm = LoadIcon(hInstance, appName); // - СѓСЃС‚Р°РЅРѕРІРєР° РјР°Р»РµРЅСЊРєРѕР№ РёРєРѕРЅРєРё
 
-  //Регистрация класса окна
+//Р РµРіРёСЃС‚СЂР°С†РёСЏ РєР»Р°СЃСЃР° РѕРєРЅР°
 
   RegisterClassEx(&wndclass);
 
-  //Получение описателя окна
+  //РџРѕР»СѓС‡РµРЅРёРµ РѕРїРёСЃР°С‚РµР»СЏ РѕРєРЅР°
 
   hwnd = CreateWindow(
     appName,
     appName,
-    WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, // - перекрывающее окно с горизонтальной и вертикальной полосами прокрутки
+    WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL, // - РїРµСЂРµРєСЂС‹РІР°СЋС‰РµРµ РѕРєРЅРѕ СЃ РіРѕСЂРёР·РѕРЅС‚Р°Р»СЊРЅРѕР№ Рё РІРµСЂС‚РёРєР°Р»СЊРЅРѕР№ РїРѕР»РѕСЃР°РјРё РїСЂРѕРєСЂСѓС‚РєРё
     CW_USEDEFAULT, CW_USEDEFAULT,
-    CW_USEDEFAULT, CW_USEDEFAULT,
-    NULL, NULL, hInstance, szCmdLine); // - передаем аргумент командной строки
+    NULL, NULL, hInstance, szCmdLine); // - РїРµСЂРµРґР°РµРј Р°СЂРіСѓРјРµРЅС‚ РєРѕРјР°РЅРґРЅРѕР№ СЃС‚СЂРѕРєРё
 
-  //Устанваливаем показ окна и его перерисовку
+  //РЈСЃС‚Р°РЅРІР°Р»РёРІР°РµРј РїРѕРєР°Р· РѕРєРЅР° Рё РµРіРѕ РїРµСЂРµСЂРёСЃРѕРІРєСѓ
 
   ShowWindow(hwnd, iCmdShow);
   UpdateWindow(hwnd);
 
-  //Цикл обработки сообщений
+  //Р¦РёРєР» РѕР±СЂР°Р±РѕС‚РєРё СЃРѕРѕР±С‰РµРЅРёР№
 
   while (GetMessage(&msg, NULL, 0, 0))
   {
@@ -58,68 +57,68 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
   return msg.wParam;
 }
 
-//Тело процедурной функции
+//РўРµР»Рѕ РїСЂРѕС†РµРґСѓСЂРЅРѕР№ С„СѓРЅРєС†РёРё
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
-  static SysState sysState; // - основная струкутура модели представления
-
-  //Логика обработки сообщений от Windows
+  static SysState sysState; // - РѕСЃРЅРѕРІРЅР°СЏ СЃС‚СЂСѓРєСѓС‚СѓСЂР° РјРѕРґРµР»Рё РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ
+  
+  //Р›РѕРіРёРєР° РѕР±СЂР°Р±РѕС‚РєРё СЃРѕРѕР±С‰РµРЅРёР№ РѕС‚ Windows
 
   switch (iMsg)
   {
-  case WM_CREATE: // - Создание окна
+  case WM_CREATE: // - РЎРѕР·РґР°РЅРёРµ РѕРєРЅР°
     CREATE_FUNC(&sysState, hwnd, lParam);
     return 0;
 
-  case WM_SIZE: // - Изменение размера окна
+  case WM_SIZE: // - РР·РјРµРЅРµРЅРёРµ СЂР°Р·РјРµСЂР° РѕРєРЅР°
     SIZE_FUNC(&sysState, hwnd);
     return 0;
 
-  case WM_PAINT: // - Отрисовка окна
+  case WM_PAINT: // - РћС‚СЂРёСЃРѕРІРєР° РѕРєРЅР°
     PAINT_FUNC(&sysState, hwnd);
     return 0;
 
-  case WM_COMMAND: // - Обработка выбора пункта меню
+  case WM_COMMAND: // - РћР±СЂР°Р±РѕС‚РєР° РІС‹Р±РѕСЂР° РїСѓРЅРєС‚Р° РјРµРЅСЋ
     COMMAND_FUNC(&sysState, hwnd, wParam);
     return 0;
 
-  case WM_VSCROLL: // - Обработка вертикального скролла
+  case WM_VSCROLL: // - РћР±СЂР°Р±РѕС‚РєР° РІРµСЂС‚РёРєР°Р»СЊРЅРѕРіРѕ СЃРєСЂРѕР»Р»Р°
     VSCROLL_FUNC(&sysState, hwnd, wParam);
     return 0;
 
-  case WM_HSCROLL: // - Обработка горизонтального скролла
+  case WM_HSCROLL: // - РћР±СЂР°Р±РѕС‚РєР° РіРѕСЂРёР·РѕРЅС‚Р°Р»СЊРЅРѕРіРѕ СЃРєСЂРѕР»Р»Р°
     HSCROLL_FUNC(&sysState, hwnd, wParam);
     return 0;
 
-   case WM_MOUSEWHEEL: // - Обработка колесика мыши
+   case WM_MOUSEWHEEL: // - РћР±СЂР°Р±РѕС‚РєР° РєРѕР»РµСЃРёРєР° РјС‹С€Рё
      AUTOvSCROLL_FUNC(&sysState, hwnd, -1 * GET_WHEEL_DELTA_WPARAM(wParam) / abs(GET_WHEEL_DELTA_WPARAM(wParam)) * sysState.yClient / sysState.yChar / autoScroll * sysState.scrlMetrix.vScrollCoef);
      return 0;
 
-   case WM_KEYDOWN: // - Обработка нажимаемых клавиш
+   case WM_KEYDOWN: // - РћР±СЂР°Р±РѕС‚РєР° РЅР°Р¶РёРјР°РµРјС‹С… РєР»Р°РІРёС€
      switch (wParam)
      {
-     case VK_UP: // - Клавиши "Стрелка вверх"
+     case VK_UP: // - РљР»Р°РІРёС€Рё "РЎС‚СЂРµР»РєР° РІРІРµСЂС…"
        AUTOvSCROLL_FUNC(&sysState, hwnd, -1 * sysState.yClient / sysState.yChar / autoScroll * sysState.scrlMetrix.vScrollCoef);
        break;
 
-     case VK_DOWN: // - Клавиши "Стрелка вниз"
+     case VK_DOWN: // - РљР»Р°РІРёС€Рё "РЎС‚СЂРµР»РєР° РІРЅРёР·"
        AUTOvSCROLL_FUNC(&sysState, hwnd, sysState.yClient / sysState.yChar / autoScroll * sysState.scrlMetrix.vScrollCoef);
        break;
 
-     case VK_LEFT: // - Клавиши "Стрелка влево"
+     case VK_LEFT: // - РљР»Р°РІРёС€Рё "РЎС‚СЂРµР»РєР° РІР»РµРІРѕ"
        AUTOhSCROLL_FUNC(&sysState, hwnd, -sysState.xClient / sysState.xChar / autoScroll * sysState.scrlMetrix.hScrollCoef);
        break;
 
-     case VK_RIGHT: // - Клавиши "Стрелка вправо"
+     case VK_RIGHT: // - РљР»Р°РІРёС€Рё "РЎС‚СЂРµР»РєР° РІРїСЂР°РІРѕ"
        AUTOhSCROLL_FUNC(&sysState, hwnd, sysState.xClient / sysState.xChar / autoScroll * sysState.scrlMetrix.hScrollCoef);
        break;
      }
      return 0;
 
-  case WM_DESTROY: // - Уничтожение окна
+  case WM_DESTROY: // - РЈРЅРёС‡С‚РѕР¶РµРЅРёРµ РѕРєРЅР°
     DESTROY_FUNC(&sysState);
     return 0;
   }
-  return DefWindowProc(hwnd, iMsg, wParam, lParam); // - Ф-я, обрабатывающая игнорируемые моей программой сообщения
+  return DefWindowProc(hwnd, iMsg, wParam, lParam); // - Р¤-СЏ, РѕР±СЂР°Р±Р°С‚С‹РІР°СЋС‰Р°СЏ РёРіРЅРѕСЂРёСЂСѓРµРјС‹Рµ РјРѕРµР№ РїСЂРѕРіСЂР°РјРјРѕР№ СЃРѕРѕР±С‰РµРЅРёСЏ
 }
