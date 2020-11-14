@@ -7,17 +7,17 @@
 #include <io.h>
 #include <fcntl.h>
 
-#define szBuffer 10  // - размер буфера для считывания
+#define szBuffer 10  // - СЂР°Р·РјРµСЂ Р±СѓС„РµСЂР° РґР»СЏ СЃС‡РёС‚С‹РІР°РЅРёСЏ
 
-//Функция освобождения памяти
+//Р¤СѓРЅРєС†РёСЏ РѕСЃРІРѕР±РѕР¶РґРµРЅРёСЏ РїР°РјСЏС‚Рё
 
 void ReleaseMemory(String* Strings, unsigned int StrNum);
 
-//Функция считывания текста из файла
+//Р¤СѓРЅРєС†РёСЏ СЃС‡РёС‚С‹РІР°РЅРёСЏ С‚РµРєСЃС‚Р° РёР· С„Р°Р№Р»Р°
 
 void ReadText(SysState* SState);
 
-//Функция инициализации структуры OPENFILENAME
+//Р¤СѓРЅРєС†РёСЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё СЃС‚СЂСѓРєС‚СѓСЂС‹ OPENFILENAME
 
 void FileInitialize(SysState* SState, HWND hwnd);
 
