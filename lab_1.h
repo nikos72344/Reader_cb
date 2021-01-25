@@ -27,21 +27,35 @@ typedef struct
 {
   char* data;  // - массив текстовых данных
   int size; // - размер массива
-}String;
+}Text;
+
+//Структура начала строки
+
+typedef struct {
+  int begIndex; // - индекс начала строки в массиве
+  viewType type;  // - тип начала строки
+}strBeg;
+
+//Структура массива начала строк
+
+typedef struct {
+  strBeg* stringBeg; // - массив индеков начала строк
+  int size; // - кол-во строк
+  int arraySize;  // - размер массива
+}ParserMetrix;
 
 //Стуктуры компановок данных модели представления:
 
 typedef struct
 {
-  int vScrollPos, vScrollMax, vScrollCoef;
-  int hScrollPos, hScrollMax, hScrollCoef;
-}ScrlMetrix;  // - описывает данные полос прокрутки
+  int pos, max, coef;
+}ScrollMetrix;  // - описывает данные полос прокрутки
 
 typedef struct
 {
-  int pntBeg, pntEnd;
+  int beg, end;
   int maxLen;
-}PrntMetrix;  // - описывает данные выводимого текста на экран
+}PrintMetrix;  // - описывает данные выводимого текста на экран
 
 //Модель представления
 
@@ -50,14 +64,14 @@ typedef struct
   viewType vType; // - режим отображения
   int xChar, yChar; // - длина и высота символа текста
   int xClient, yClient; // - размер клиентской области окна
-  ScrlMetrix scrlMetrix; // - данные полос прокрутки
-  String* strings;   // - массив строк текстовых данных
-  int strNum, sumNum; // - количество строк без и с учетом метрики соответственно
-  PrntMetrix prntMetrix; // - метрика выводимого текста
+  Text text;   // - массив текстовых данных
   HFONT font; // - используемый шрифт
-  OPENFILENAME ofn; // - структура для инициализации диалога открытия файла
-  char* flName; // - указатель на массив хранения строки расположения файла
-  char* ttlName; // - указатель на массив хранения строки названия файла
-}SysState;
+  ScrollMetrix vScroll, hScroll; // - данные полос прокрутки
+  ParserMetrix defParser, layParser;  // - структуры парсинга для режима по умолчанию и режима верстки
+  PrintMetrix printMetrix; // - метрика выводимого текста
+  char* filePath; // - указатель на массив хранения строки расположения файла
+  char* fileTitle; // - указатель на массив хранения строки названия файла
+  OPENFILENAMEA ofn; // - структура для инициализации диалога открытия файла
+}SystemState;
 
 #endif

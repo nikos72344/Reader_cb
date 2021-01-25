@@ -3,26 +3,26 @@
 
 #include <Windows.h>
 
-#define autoScroll 10 // - РјР°РєСЂРѕСЃ, Р·РЅР°С‡СЏС‰РёР№ С‡Р°СЃС‚СЊ РѕРєРЅР° РїСЂРё РїСЂРѕРєСЂСѓС‚РєРµ РєРѕР»РµСЃРєРѕРј РјС‹С€Рё РёР»Рё РєР»Р°РІРёР°С‚СѓСЂРѕР№
+#define autoScroll 10 // - макрос, значящий часть окна при прокрутке колеском мыши или клавиатурой
 
-//Р¤СѓРЅРєС†РёРё РѕР±СЂР°Р±РѕС‚РєРё СЃРѕРѕР±С‰РµРЅРёР№ Windows
+//Функции обработки сообщений Windows
 
-void CREATE_FUNC(SysState* SState, HWND hwnd, LPARAM lParam);
+void CREATE_FUNC(SystemState* SState, HWND hwnd, LPARAM lParam);
 
-void SIZE_FUNC(SysState* SState, HWND hwnd);
+void SIZE_FUNC(SystemState* SState, HWND hwnd, LPARAM lParam);
 
-void PAINT_FUNC(SysState* SState, HWND hwnd);
+void PAINT_FUNC(SystemState* SState, HWND hwnd);
 
-void COMMAND_FUNC(SysState* SState, HWND hwnd, WPARAM wParam);
+void COMMAND_FUNC(SystemState* SState, HWND hwnd, WPARAM wParam);
 
-void VSCROLL_FUNC(SysState* SState, HWND hwnd, WPARAM wParam);
+void VSCROLL_FUNC(SystemState* SState, HWND hwnd, WPARAM wParam);
 
-void HSCROLL_FUNC(SysState* SState, HWND hwnd, WPARAM wParam);
+void HSCROLL_FUNC(SystemState* SState, HWND hwnd, WPARAM wParam);
 
-void AUTOvSCROLL_FUNC(SysState* SState, HWND hwnd, int vScrollDiff);
+void AUTOvSCROLL_FUNC(SystemState* SState, HWND hwnd, int vScrollDiff);
 
-void AUTOhSCROLL_FUNC(SysState* SState, HWND hwnd, int hScrollDiff);
+void AUTOhSCROLL_FUNC(SystemState* SState, HWND hwnd, int hScrollDiff);
 
-void DESTROY_FUNC(SysState* SState);
+void DESTROY_FUNC(SystemState* SState);
 
 #endif

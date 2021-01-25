@@ -3,26 +3,24 @@
 
 #include <Windows.h>
 
-#define ScrollSize 65536 // - макрос, используемый для решения пролемы ограниченных значений диапазона полосы прокрутки
+#define ScrollSize 65536 // - макрос, используемый для решения проблемы ограниченных значений диапазона полосы прокрутки
 
 //Функция обновления данных вывода текста
 
-void PrintMetrixUpd(SysState* SState, RECT* RCT);
+void PrintMetrixUpd(SystemState* SState);
 
 //Функции обновления данных структуры скроллов
 
-void vScrollUpd(SysState* SState, HWND hwnd);
+void vScrollUpd(SystemState* SState, HWND hwnd);
 
-void hScrollUpd(SysState* SState, HWND hwnd);
+void hScrollUpd(SystemState* SState, HWND hwnd);
 
-void ScrollsReset(SysState* SState, HWND hwnd);
+void ScrollsReset(SystemState* SState, HWND hwnd);
 
-//Функция изменения заголовка окна в зависимости от открытого файла
+//Функции синхронизации выводимых строк
 
-void ChangeWndTitle(SysState* SState, HWND hwnd);
+void ToLayout(SystemState* SState, HWND hwnd);
 
-//Функция обработка агрументов командной строки
-
-void Args(SysState* SState, HWND hwnd, LPARAM lParam);
+void ToDefault(SystemState* SState, HWND hwnd);
 
 #endif
