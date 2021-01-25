@@ -1,24 +1,27 @@
 #ifndef __FILE_H
 #define __FILE_H
 
+#include"scrolls.h"
 #include <Windows.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <io.h>
-#include <fcntl.h>
 
-#define szBuffer 10  // - СЂР°Р·РјРµСЂ Р±СѓС„РµСЂР° РґР»СЏ СЃС‡РёС‚С‹РІР°РЅРёСЏ
+#define Buffer 10  // - размер буфера выделения памяти
 
-//Р¤СѓРЅРєС†РёСЏ РѕСЃРІРѕР±РѕР¶РґРµРЅРёСЏ РїР°РјСЏС‚Рё
+//Функция инициализации структуры OPENFILENAME
 
-void ReleaseMemory(String* Strings, unsigned int StrNum);
+void OFNInitialize(SystemState* SState, HWND hwnd);
 
-//Р¤СѓРЅРєС†РёСЏ СЃС‡РёС‚С‹РІР°РЅРёСЏ С‚РµРєСЃС‚Р° РёР· С„Р°Р№Р»Р°
+//Функция обработка агрументов командной строки
 
-void ReadText(SysState* SState);
+void ArgumentsProcessing(SystemState* SState, HWND hwnd, LPARAM lParam);
 
-//Р¤СѓРЅРєС†РёСЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё СЃС‚СЂСѓРєС‚СѓСЂС‹ OPENFILENAME
+//Функция работы с входным файлом
 
-void FileInitialize(SysState* SState, HWND hwnd);
+void OpenFileProcessing(SystemState* SState, HWND hwnd);
+
+//Функция перерасчета начала строк
+
+void TextResizer(SystemState* SState, HWND hwnd);
 
 #endif

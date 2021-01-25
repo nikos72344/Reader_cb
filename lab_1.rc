@@ -1,24 +1,24 @@
 #include "lab_1.h"
 
-//РћРїРёСЃР°РЅРёРµ СЂРµСЃСѓСЂСЃР° РёРєРѕРЅРєРё
+//Описание ресурса иконки
 
 Reader ICON icon.ico
 
-//РћРїРёСЃР°РЅРёРµ СЂРµСЃСѓСЂСЃР° РјРµРЅСЋ
+//Описание ресурса меню
 
 Reader MENU
 {
-  POPUP "&File" // - cРµРєС†РёСЏ "File"
+  POPUP "&File" // - cекция "File"
   {
     MENUITEM "&Open...", IDM_OPEN
     MENUITEM SEPARATOR
     MENUITEM "&Exit", IDM_EXIT
   }
-  POPUP "&View" // - СЃРµРєС†РёСЏ "View"
+  POPUP "&View" // - секция "View"
   {
     MENUITEM "&Layout", IDM_LAYOUT, CHECKED
   }
-  POPUP "&Help" // - СЃРµРєС†РёСЏ "Help"
+  POPUP "&Help" // - секция "Help"
   {
     MENUITEM "&About Reader...", IDM_ABOUT
   }
