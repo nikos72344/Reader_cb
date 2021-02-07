@@ -78,6 +78,7 @@ void PAINT_FUNC(SystemState* SState, HWND hwnd)
   HDC hdc;
   PAINTSTRUCT ps;
   ParserMetrix* parser = NULL;
+  int i;
   hdc = BeginPaint(hwnd, &ps);  // - начало перерисовки окна
 
   //Выбор соответствующего массива начал строк
@@ -90,7 +91,7 @@ void PAINT_FUNC(SystemState* SState, HWND hwnd)
 
   //Вывод строк текста
 
-  for (int i = SState->printMetrix.beg; i < SState->printMetrix.end; i++) 
+  for (i = SState->printMetrix.beg; i < SState->printMetrix.end; i++)
   {
     int x = SState->xChar * (1 - SState->hScroll.pos * SState->hScroll.coef);
     int y = SState->yChar * (i - SState->vScroll.pos * SState->vScroll.coef);
@@ -204,7 +205,7 @@ void VSCROLL_FUNC(SystemState* SState, HWND hwnd, WPARAM wParam)
   if (vScrollDiff != 0 || LOWORD(wParam) == SB_THUMBPOSITION)
   {
     SState->vScroll.pos += vScrollDiff; // - установка нового значения положения ползунка в структуре
-    ScrollWindow(hwnd, 0, -SState->yChar * vScrollDiff, NULL, NULL); // - прокрутка окна
+    ScrollWindow(hwnd, 0, -SState->yChar * vScrollDiff * SState->vScroll.coef, NULL, NULL); // - прокрутка окна
     SetScrollPos(hwnd, SB_VERT, SState->vScroll.pos, TRUE); // - установка нового значения ползунка в полосе прокрутки
     PrintMetrixUpd(SState); // - обновсление данных вывода текста
     UpdateWindow(hwnd); // - обновление окна
@@ -250,7 +251,7 @@ void HSCROLL_FUNC(SystemState* SState, HWND hwnd, WPARAM wParam)
   if (hScrollDiff != 0)
   {
     SState->hScroll.pos += hScrollDiff; // - установка нового положения ползунка в структуре
-    ScrollWindow(hwnd, -SState->xChar * hScrollDiff, 0, NULL, NULL); // - прокрутка окна
+    ScrollWindow(hwnd, -SState->xChar * hScrollDiff * SState->hScroll.coef, 0, NULL, NULL); // - прокрутка окна
     SetScrollPos(hwnd, SB_HORZ, SState->hScroll.pos, TRUE); // - установка нового положения ползунка в строке прокрутки
     UpdateWindow(hwnd); // - обновление окна
   }
@@ -267,7 +268,7 @@ void AUTOvSCROLL_FUNC(SystemState* SState, HWND hwnd, int vScrollDiff)
   if (vScrollDiff != 0)
   {
     SState->vScroll.pos += vScrollDiff; // - установка нового значения положения ползунка в структуре
-    ScrollWindow(hwnd, 0, -SState->yChar * vScrollDiff, NULL, NULL); // - прокрутка окна
+    ScrollWindow(hwnd, 0, -SState->yChar * vScrollDiff * SState->vScroll.coef, NULL, NULL); // - прокрутка окна
     SetScrollPos(hwnd, SB_VERT, SState->vScroll.pos, TRUE); // - установка нового значения ползунка в полосе прокрутки
     PrintMetrixUpd(SState); // - обновсление данных вывода текста
     UpdateWindow(hwnd); // - обновление окна
@@ -286,7 +287,7 @@ void AUTOhSCROLL_FUNC(SystemState* SState, HWND hwnd, int hScrollDiff)
   if (hScrollDiff != 0)
   {
     SState->hScroll.pos += hScrollDiff; // - установка нового положения ползунка в структуре
-    ScrollWindow(hwnd, -SState->xChar * hScrollDiff, 0, NULL, NULL); // - прокрутка окна
+    ScrollWindow(hwnd, -SState->xChar * hScrollDiff * SState->hScroll.coef, 0, NULL, NULL); // - прокрутка окна
     SetScrollPos(hwnd, SB_HORZ, SState->hScroll.pos, TRUE); // - установка нового положения ползунка в строке прокрутки
     UpdateWindow(hwnd); // - обновление окна
   }
