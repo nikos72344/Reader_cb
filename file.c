@@ -5,8 +5,8 @@
 
 int ReadText(SystemState* SState)
 {
-  FILE* file = NULL;
-  if (fopen_s(&file, SState->ofn.lpstrFile, "rb"))  // - открытие файла на чтение
+  FILE* file = fopen(SState->ofn.lpstrFile, "rb");
+  if (!file)  // - открытие файла на чтение
   {
     MessageBeep(0);
     return 0;
@@ -39,8 +39,9 @@ int ReadText(SystemState* SState)
 
 //Установка начала строк для режимов по умолчанию и верстки
 
-int PrimaryParser(SystemState* SState) 
+int PrimaryParser(SystemState* SState)
 {
+    int i;
   //Выделение куска памяти под массив структур начала строк и заполнение начальных данных
 
   SState->defParser.stringBeg = (strBeg*)malloc(Buffer * sizeof(strBeg));
@@ -64,7 +65,7 @@ int PrimaryParser(SystemState* SState)
   int stringLength = 0;
   int maxLen = 0;
   SState->printMetrix.maxLen = 0;
-  for (int i = 0; i < SState->text.size; i++)
+  for (i = 0; i < SState->text.size; i++)
   {
     stringLength++;
     maxLen++;
@@ -113,6 +114,13 @@ int PrimaryParser(SystemState* SState)
       maxLen = 0;
       stringLength = 0;
     }
+    if (SState->text.data[i] == '\0')
+    {
+      if (maxLen > SState->printMetrix.maxLen)  // - нахождение строки, максимальной длины для горизонтальной прокрутки
+        SState->printMetrix.maxLen = maxLen;
+      maxLen = 0;
+      stringLength = 0;
+    }
   }
   return 1;
 }
@@ -120,16 +128,16 @@ int PrimaryParser(SystemState* SState)
 //Обновление начала строк для режима верстки при изменении размера экрана
 
 int SecondaryParser(SystemState* SState) {
-  int stringLength = 0;
+  int stringLength = 0, i;
   int ind = SState->printMetrix.beg;
-  char* beg = &SState->text.data[SState->layParser.stringBeg[SState->printMetrix.beg].begIndex];
+  char* beg = &SState->text.data[SState->layParser.stringBeg[min(SState->layParser.size, SState->printMetrix.beg)].begIndex];
 
   //Запись новых данных происходит поверх старых
 
   SState->layParser.stringBeg[0].begIndex = 0;
   SState->layParser.stringBeg[0].begIndex = defaultV;
   SState->layParser.size = 1;
-  for (int i = 0; i < SState->text.size; i++)
+  for (i = 0; i < SState->text.size; i++)
   {
     stringLength++;
     if (stringLength >= SState->xClient / SState->xChar - 1)  // - перенесенная строка в режиме верстки
@@ -146,8 +154,6 @@ int SecondaryParser(SystemState* SState) {
       SState->layParser.stringBeg[SState->layParser.size].type = layoutV;
       SState->layParser.size++;
       stringLength = 0;
-      if (&SState->text.data[SState->layParser.stringBeg[SState->layParser.size - 1].begIndex] == beg)  // - нахождение первой выводимой строки при старых данных верстки
-        ind = SState->layParser.size - 1;
     }
     if (SState->text.data[i] == '\n') // - конец строки
     {
@@ -163,9 +169,9 @@ int SecondaryParser(SystemState* SState) {
       SState->layParser.stringBeg[SState->layParser.size].type = defaultV;
       SState->layParser.size++;
       stringLength = 0;
-      if (&SState->text.data[SState->layParser.stringBeg[SState->layParser.size - 1].begIndex] == beg)  // - нахождение первой выводимой строки при старых данных верстки
-        ind = SState->layParser.size - 1;
     }
+    if (&SState->text.data[i] == beg)  // - нахождение первой выводимой строки при старых данных верстки
+      ind = SState->layParser.size - 1;
   }
   if (SState->vType == layoutV) // - установка нового положения ползунка для синхронизации выводимых строк
     SState->vScroll.pos = min(ind / SState->vScroll.coef, SState->vScroll.max);
@@ -215,8 +221,8 @@ void ChangeWndTitle(SystemState* SState, HWND hwnd)
 
   //Заполнение буфера
 
-  strcpy_s(title, size, SState->ofn.lpstrFileTitle);
-  strcat_s(title, size, postfix);
+  strcpy(title, SState->ofn.lpstrFileTitle);
+  strcat(title, postfix);
   SetWindowTextA(hwnd, title);  // - установка нового заголовка
   free(title);  // - освобождение буфера
 }
@@ -272,8 +278,8 @@ void ArgumentsProcessing(SystemState* SState, HWND hwnd, LPARAM lParam)
 
   //Заполнение соответствующих массивов
 
-  strcpy_s(SState->filePath, _MAX_PATH, temp);
-  strcpy_s(SState->fileTitle, _MAX_FNAME + _MAX_EXT, temp);
+  strcpy(SState->filePath, temp);
+  strcpy(SState->fileTitle, temp);
 
   //Получение размеров рабочей области окна и сохранение значений в структуре
 

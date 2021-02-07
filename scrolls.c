@@ -32,11 +32,11 @@ void vScrollUpd(SystemState* SState, HWND hwnd)
   {
   case layoutV: // - в случае режима верстки коэффициент и максимальное значение высчитываются исходя из количества строк с учетом метрики отображения
     SState->vScroll.coef = SState->layParser.size / ScrollSize + 1;
-    SState->vScroll.max = max(0, SState->layParser.size / SState->vScroll.coef - SState->yClient / SState->yChar);
+    SState->vScroll.max = max(0, (SState->layParser.size - SState->yClient / SState->yChar) / SState->vScroll.coef);
     break;
   case defaultV: // - в случае режима по умолчанию коэффициент и максимальное значение высчитываются исходя из количества строк без учета метрики отображения
     SState->vScroll.coef = SState->defParser.size / ScrollSize + 1;
-    SState->vScroll.max = max(0, SState->defParser.size / SState->vScroll.coef - SState->yClient / SState->yChar);
+    SState->vScroll.max = max(0, (SState->defParser.size - SState->yClient / SState->yChar) / SState->vScroll.coef);
     break;
   }
 
@@ -63,7 +63,7 @@ void hScrollUpd(SystemState* SState, HWND hwnd)
     break;
   case defaultV:  // - в случае режима по умолчанию коэффициент, максимальное значение и положение ползунка высчитываются исходя из максимальной длины отображаемой строки
     SState->hScroll.coef = SState->printMetrix.maxLen / ScrollSize + 1;
-    SState->hScroll.max = max(0, SState->printMetrix.maxLen / SState->hScroll.coef - (SState->xClient + SState->xChar) / SState->xChar);
+    SState->hScroll.max = max(0, (SState->printMetrix.maxLen - SState->xClient / SState->xChar + 1) / SState->hScroll.coef);
     SState->hScroll.pos = min(SState->hScroll.pos, SState->hScroll.max);
     break;
   }
@@ -85,7 +85,7 @@ void ScrollsReset(SystemState* SState, HWND hwnd)
     //Вертикальная полоса прокрутки высчитывается с учетом количества строк с учетом метрики отображения
 
     SState->vScroll.coef = SState->layParser.size / ScrollSize + 1;
-    SState->vScroll.max = max(0, SState->layParser.size / SState->vScroll.coef - SState->yClient / SState->yChar);
+    SState->vScroll.max = max(0, (SState->layParser.size - SState->yClient / SState->yChar) / SState->vScroll.coef);
 
     //Горизонтальная полоса "выключается"
 
@@ -97,12 +97,12 @@ void ScrollsReset(SystemState* SState, HWND hwnd)
     //Вертикальная полоса прокрутки высчитывается с учетом количества строк без учета метрики отображения
 
     SState->vScroll.coef = SState->defParser.size / ScrollSize + 1;
-    SState->vScroll.max = max(0, SState->defParser.size / SState->vScroll.coef - SState->yClient / SState->yChar);
+    SState->vScroll.max = max(0, (SState->defParser.size - SState->yClient / SState->yChar) / SState->vScroll.coef);
 
     //Горизонтальная полоса прокрутки высчитывается с учетом максимальной длины отображаемой строки
 
     SState->hScroll.coef = SState->printMetrix.maxLen / ScrollSize + 1;
-    SState->hScroll.max = max(0, SState->printMetrix.maxLen / SState->hScroll.coef - (SState->xClient + SState->xChar) / SState->xChar);
+    SState->hScroll.max = max(0, (SState->printMetrix.maxLen - SState->xClient / SState->xChar + 1) / SState->hScroll.coef);
     break;
   }
 
@@ -124,7 +124,8 @@ void ScrollsReset(SystemState* SState, HWND hwnd)
 
 void ToLayout(SystemState* SState, HWND hwnd)
 {
-  for (int i = 0; i < SState->layParser.size; i++)  // - нахождени первой выводимой строки
+    int i;
+  for (i = 0; i < SState->layParser.size; i++)  // - нахождени первой выводимой строки
   {
     if (&SState->text.data[SState->layParser.stringBeg[i].begIndex] == &SState->text.data[SState->defParser.stringBeg[SState->printMetrix.beg].begIndex])
     {
@@ -139,10 +140,11 @@ void ToLayout(SystemState* SState, HWND hwnd)
 
 void ToDefault(SystemState* SState, HWND hwnd)
 {
+    int i;
   int ind = SState->printMetrix.beg;
   while (SState->layParser.stringBeg[ind].type != defaultV) // - нахождение начала ближайшей неперенесенной строки
     ind--;
-  for (int i = 0; i < SState->defParser.size; i++)
+  for (i = 0; i < SState->defParser.size; i++)
   {
     if (&SState->text.data[SState->defParser.stringBeg[i].begIndex] == &SState->text.data[SState->layParser.stringBeg[ind].begIndex])
     {
